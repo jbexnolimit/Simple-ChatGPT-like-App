@@ -1,0 +1,77 @@
+
+<html>
+    <head>
+        <title>Chat</title>
+        <link rel ="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+
+    <div class="container">
+        <div class="body" id="chatbox"></div>
+        <div class="footer">
+            <form>
+                <input type="text" name="text" id="input" placeholder="Write message...">
+                <button onclick="sendMessage()">SEND</button>
+            </form>
+        </div>
+    </div>
+  
+    </body>
+
+    <script>
+
+                if(localStorage.getItem('data') != null){
+                    
+                    var myData = JSON.parse(localStorage.getItem('data'));
+                        
+                            for( let i = 0; i<myData.length; i++){
+                                var pTimeStamp = document.createElement("tr");
+                                var pMessage = document.createElement("p");
+                                pTimeStamp.textContent = myData[i].timestamp;
+                                pMessage.textContent = myData[i].message;
+                                document.getElementById('chatbox').appendChild(pTimeStamp);
+                                document.getElementById('chatbox').appendChild(pMessage);
+                            }
+            
+                    }
+
+                    function sendMessage(){
+
+                            var new_data = {
+                                "message": document.getElementById('input').value,
+                                "timestamp": formatDate()
+                            }
+
+                            if(localStorage.getItem('data') == null){
+                                localStorage.setItem('data', '[]');
+                            }
+
+                            var old_data = JSON.parse(localStorage.getItem('data'));
+                            old_data.push(new_data);
+
+                            localStorage.setItem('data', JSON.stringify(old_data));
+                         
+                            }
+
+                    function formatDate(){
+                        const date = new Date();
+                        const day = date.getDate();
+                        const month = date.getMonth(); // January is 0, so we need to add 1
+                        const year = date.getFullYear();
+                        const hours = date.getHours();
+                        const minutes = date.getMinutes();
+
+                        var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+                        let ampm = 'AM';
+                        if (hours > 11) {
+                        ampm = 'PM';
+                        }
+
+                       var date_format = `${months[month]} ${day}, ${year} ${hours}:${minutes} ${ampm}`;
+                        return date_format;
+                    }
+    </script>
+
+
+</html>
